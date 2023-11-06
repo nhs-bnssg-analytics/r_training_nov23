@@ -26,3 +26,26 @@ runif(mi = 1, ma = 10, n = 5)
 
 c(1, 2, 3) + c(5, 6, 7)
 
+
+# ex pg.11 ----------------------------------------------------------------
+
+set.seed(123) # we can set the random seed 
+sample(x = letters, size = 5)
+
+# R packages --------------------------------------------------------------
+
+# packages are install in your libpath
+
+.libPaths()
+
+install.packages("nycflights13")
+# pak::pkg_install() another way (newer) of installing packages
+
+library(MASS)
+Animals
+?Animals
+
+library(dplyr)
+
+objects("package:stats")
+
