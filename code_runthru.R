@@ -1,1 +1,28 @@
-# this is a comment
+# objects
+
+class(ggplot2::diamonds$price)
+summary(ggplot2::diamonds$price)
+summary(ggplot2::diamonds$cut)
+
+mean(c(1,2,3))
+
+formals(rnorm)
+
+rnorm(n = 5, mean = 10, sd = 5)
+rnorm(n = 5, mean = -5, sd = 1)
+?rnorm
+
+??"gamma"
+
+
+runif(n = 5, min = 1, max = 10)
+runif(min = 1, max = 10, n = 5)
+runif(5, 1, 6)
+runif(mi = 1, ma = 10, n = 5)
+
+1 + 2
+
+`+`(1, 2)
+
+c(1, 2, 3) + c(5, 6, 7)
+
