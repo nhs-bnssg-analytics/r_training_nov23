@@ -49,3 +49,31 @@ library(dplyr)
 
 objects("package:stats")
 
+# ex pg.17 ----------------------------------------------------------------
+
+search()
+objects("package:datasets")
+library(modeldata)
+objects("package:modeldata")
+search()
+objects(2)
+
+# Workspace objects -------------------------------------------------------
+
+x <- 4*3
+x = 13
+
+x <- rnorm(n = 10, sd = 2)
+y <- runif(10)
+
+# Working directories -----------------------------------------------------
+
+getwd()
+
+setwd(r"(S:\Finance\Shared Area\BNSSG - BI\8 Modelling and Analytics\working\nh\projects\r_training_4)")
+
+file.exists("data/measles.csv")
+file.exists("data/foo.csv")
+
+here::here("data", "measles.csv")
+here::here("data/measles.csv")
