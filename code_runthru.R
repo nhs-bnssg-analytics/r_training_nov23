@@ -77,3 +77,102 @@ file.exists("data/foo.csv")
 
 here::here("data", "measles.csv")
 here::here("data/measles.csv")
+
+# ex pg. 23 ---------------------------------------------------------------
+getwd()
+setwd("..")
+getwd()
+setwd(here::here("")) # here 'knows' where the project is
+
+file.exists("data/bridges.csv")
+file.exists(here::here("data", "bridges.csv"))
+
+# reading data ------------------------------------------------------------
+
+library(readr)
+
+measles <- read_csv("data/measles.csv")
+View(measles)
+
+head(measles, n = 3)
+tail(measles, n = 3)
+
+# ex pg. 28 ---------------------------------------------------------------
+
+bridges <- read_csv("data/bridges.csv")
+View(bridges)
+tail(bridges, n = 10)
+
+# data frame attributes ---------------------------------------------------
+ncol(measles)
+nrow(measles)
+dim(measles)
+names(measles)
+
+# reading data from excel -------------------------------------------------
+
+library(readxl)
+
+
+
+excel_sheets("data/RTT-Incomplete-Provider.xls")
+
+rtt_data <- read_excel("data/RTT-Incomplete-Provider.xls", sheet = "Provider")
+head(rtt_data)
+
+nrow(rtt_data)
+names(rtt_data)
+
+# Vectors -----------------------------------------------------------------
+
+measles$state
+
+c(1, 3, 4, 5)
+c("A", "C", "D")
+c(TRUE, FALSE, FALSE)
+
+1:100
+
+100:1
+-10:10
+
+seq(from = 0, to = 13, by = 1)
+seq(from = 0, to = 12, by = 3)
+seq(from = 1, to = 37, length.out = 17)
+seq(from = 1, to = 37, length.out = 18)
+
+rep(1:3, times = 3)
+rep(1:3, each = 3)
+
+c(rep(1:3, each = 3), seq(from = 0, to = 12, by = 3))
+
+# subscripting vectors ----------------------------------------------------
+
+letters
+LETTERS
+LETTERS[1:3]
+LETTERS[c(TRUE, FALSE)]
+LETTERS[LETTERS == "G"]
+measles[measles$count > 40, ]
+
+# the notional machine ---------------------------------------------------
+
+is.integer(2)
+is.integer(2L)
+
+c(1, 2, 3, "4")
+length(c("thank you ", "NHS"))
+nchar("NHS")
+
+nchar("700000")
+nchar(700000)
+
+max(airquality$Ozone)
+max(airquality$Ozone, na.rm = TRUE)
+
+mean(replicate(5e3,
+               any(duplicated(sample(1:365,
+                                     size = 23,
+                                     replace = TRUE)
+                              ))))
+
