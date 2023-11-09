@@ -176,3 +176,96 @@ mean(replicate(5e3,
                                      replace = TRUE)
                               ))))
 
+
+# data manipulation with dplyr --------------------------------------------
+
+library(dplyr)
+library(tidyverse)
+
+
+# intro to dplyr syntax
+
+# data.frame <- DPLYR_VERB(data.frame, ... (specification) ...)
+
+txhousing
+
+filter(txhousing, year == 2007)
+
+filter(txhousing, median < 15E4)
+
+filter(txhousing, year == 2007, median < 15E4)
+
+filter(txhousing, year == 2007 | median < 15E4)
+
+filter(txhousing, month %in% 1:4)
+
+# select ------------------------------------------------------------------
+
+select(txhousing, city, year)
+
+select(txhousing, 1:3, 5)
+
+select(txhousing, -5)
+
+select(txhousing, -inventory)
+select(txhousing, -inventory, -sales)
+
+select(txhousing, city:volume)
+
+select(txhousing, starts_with("m"))
+
+select(txhousing, one_of("listings", "date", "this_column_doesnt_exist"))
+
+select(txhousing, contains("a"))
+
+
+# ex pg.45 ----------------------------------------------------------------
+measles <- read_csv("data/measles.csv")
+
+measles_hawaii <- filter(measles, state == "Hawaii")
+measles_hawaii
+
+measles_hawaii <- select(measles_hawaii, -state)
+measles_hawaii
+
+measles_hawaii <- filter(measles_hawaii, count > 250)
+measles_hawaii
+
+# arrange -----------------------------------------------------------------
+
+arrange(txhousing, median)
+arrange(txhousing, desc(median))
+
+arrange(txhousing, median, volume)
+
+# mutate/summarise/group_by -----------------------------------------------
+
+mutate(txhousing, sales/listings)
+mutate(txhousing, sales_per_listing = sales/listings)
+mutate(txhousing,
+       sales_per_listing = sales/listings,
+       sales_per_listing_squared = sales_per_listing^2)
+
+
+summarise(txhousing, min_value = min(median, na.rm = TRUE))
+summarise(txhousing, n_cities = n_distinct(city), nrows = n())
+summarise(txhousing, n_missing = sum(is.na(median)))
+
+
+summarise(group_by(txhousing, year), min_value = min(median, na.rm = TRUE))
+summarise(group_by(txhousing, year), avg_value = mean(median, na.rm = TRUE))
+summarise(group_by(txhousing, year),
+          min_value = min(median, na.rm = TRUE),
+          avg_value = mean(median, na.rm = TRUE))
+
+
+mutate(group_by(txhousing, year),
+       avg_value = mean(median, na.rm = TRUE),
+       res_value = median - avg_value)
+
+filter(group_by(txhousing, city),
+       median == max(median, na.rm = TRUE))
+
+
+
+
