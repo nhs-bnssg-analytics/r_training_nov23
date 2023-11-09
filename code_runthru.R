@@ -391,4 +391,71 @@ duration <- as.duration(interval)
 time_length(period, unit = "year")
 time_length(duration, unit = "year")
 
+# mixed formats
+c("2021-12-01", "01-01-2004") %>%
+  parse_date_time(orders = c("ymd", "dmy")) %>%
+  as.Date()
 
+# ex pg.67 ----------------------------------------------------------------
+
+ex_dates <- c("2023-11-09", "2023-12-31", "2024-02-05")
+
+ex_dates <- ymd(ex_dates)
+ex_dates
+
+ex_dates[3] - today()
+
+weekdays(ex_dates[2])
+wday(ex_dates[2])
+ex_date_seq <- seq(ymd("1980-01-01"), ymd("2020-01-01"), by = "6 month")
+floor_date(ex_date_seq, unit = years(10))
+
+# factors with forcats ----------------------------------------------------
+
+
+x <- c("B", "C", "D", "A", "D", "A", "B", "C")
+y <- factor(x)
+
+cyl <- ggplot2::mpg %>%
+  pull(cyl)
+
+unique(cyl)
+
+cyl <- factor(cyl)
+cyl <- factor(cyl, labels = c("four", "five", "six", "eight"))
+cyl <- factor(cyl, labels = c("four", "five", "six", "eight"))
+cyl <- factor(cyl, levels = 4:8, labels = c("four", "five", "six", "seven", "eight"))
+
+cyl
+
+boxplot(cty ~ trans, data = ggplot2::mpg)
+
+library(forcats)
+
+boxplot(cty ~ fct_reorder(trans, cty),
+        data = ggplot2::mpg)
+
+
+starwars %>%
+  mutate(homeworld = fct_infreq(homeworld)) %>%
+  count(homeworld)
+
+starwars %>%
+  mutate(homeworld = fct_infreq(homeworld),
+         homeworld = fct_lump_n(homeworld, n = 5)) %>%
+  count(homeworld)
+
+starwars %>%
+  mutate(homeworld = fct_infreq(homeworld),
+         homeworld = fct_lump_n(homeworld, n = 5),
+         homeworld = fct_na_value_to_level(homeworld, level = "(Missing)")) %>%
+  count(homeworld)
+
+ages <- c(19, 38, 33, 25, 21, 27, 27, 24, 25, 32)
+cut(ages, breaks = 3)
+
+cut(ages, breaks = c(18, 25, 30, Inf))
+cut(ages, breaks = c(18, 25, 30, Inf), right = FALSE)
+cut(ages, breaks = c(18, 25, 30, Inf), right = FALSE, labels = c("18-25",
+                                                                 "25-30",
+                                                                 "30+"))
