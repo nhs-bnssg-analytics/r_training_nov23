@@ -459,3 +459,47 @@ cut(ages, breaks = c(18, 25, 30, Inf), right = FALSE)
 cut(ages, breaks = c(18, 25, 30, Inf), right = FALSE, labels = c("18-25",
                                                                  "25-30",
                                                                  "30+"))
+
+# ex pg.77 ----------------------------------------------------------------
+
+
+airquality %>%
+  mutate(Month = factor(Month,
+                        levels = 1:12,
+                        labels = month.name),
+         high_wind = cut(Wind, breaks = c(0, 15, Inf), labels = c("No", "Yes")))
+
+
+airquality %>%
+  mutate(Month = factor(Month,
+                        levels = 1:12,
+                        labels = month.name),
+         high_wind = ifelse(Wind > 15, no = "No", yes = "Yes"))
+
+# Characters --------------------------------------------------------------
+
+library(stringr)
+my_string <- "National Health Service"        # Save the string 
+str_length(my_string)                 # Number of characters
+
+
+str_sub(my_string, 1, 8)
+str_sub(my_string, c(1, 10, 17), c(8, 15, 23))
+
+str_c("X", 1:10)
+str_c("X", 1:10, sep = "-")
+str_c("X", 1:10, sep = "-", collapse = ", ")
+
+
+firsts  <- c("nick", "dan", "chris")
+lasts <- c("howlett", "levy", "waller")
+
+str_c(firsts, lasts, sep = " ")
+str_c(firsts, lasts, sep = " ", collapse = ", ")
+str_c(str_to_title(firsts), str_to_title(lasts), sep = " ", collapse = ", ")
+
+
+str_subset(colours(), "orange")
+
+str_subset(words, "^[^aeiou]*?a[^aeiou]*?e[^aeiou]*?i[^aeiou]*?o[^aeiou]*?u[^aeiou]*$")
+str_subset(words, "^[^aeiou]*?u[^aeiou]*?o[^aeiou]*?i[^aeiou]*?e[^aeiou]*?a[^aeiou]*$")
