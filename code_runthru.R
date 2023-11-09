@@ -253,10 +253,16 @@ summarise(txhousing, n_missing = sum(is.na(median)))
 
 
 summarise(group_by(txhousing, year), min_value = min(median, na.rm = TRUE))
+summarise(group_by(txhousing, year), min_value = min(median, na.rm = TRUE))
 summarise(group_by(txhousing, year), avg_value = mean(median, na.rm = TRUE))
 summarise(group_by(txhousing, year),
           min_value = min(median, na.rm = TRUE),
           avg_value = mean(median, na.rm = TRUE))
+
+
+library(magrittr)
+
+
 
 
 mutate(group_by(txhousing, year),
@@ -267,5 +273,122 @@ filter(group_by(txhousing, city),
        median == max(median, na.rm = TRUE))
 
 
+# ex pg.56 ----------------------------------------------------------------
+
+measles_by_state <- group_by(measles, state)
+
+measles_sum <- summarise(measles_by_state,
+                         count_mean = mean(count, na.rm = TRUE),
+                         count_min = min(count, na.rm = TRUE),
+                         count_max = max(count, na.rm = TRUE))
+
+
+filter(measles_by_state, count == max(count, na.rm = TRUE))
+
+
+# the pipe ----------------------------------------------------------------
+
+summarise(group_by(txhousing, year), min_value = min(median, na.rm = TRUE))
+
+txhousing %>%
+  group_by(year) %>%
+  summarise(min_value = min(median, na.rm = TRUE))
+
+
+# ex pg.58 ----------------------------------------------------------------
+
+measles %>%
+  group_by(state) %>%
+  arrange(desc(count)) %>%
+  filter(count > 250) %>%
+  mutate(max_count = max(count, na.rm = TRUE))
+
+
+pos_data <-
+  tibble(
+    date = rep(seq.Date(
+      lubridate::ymd("2001-01-01"), lubridate::ymd("2020-01-01"), "months"
+    ), each = 10),
+    customer = replicate(2290, paste(sample(letters, 2), collapse = "")),
+    amount = rnorm(2290)
+  )
+
+pos_data %>%
+  group_by(customer) %>%
+  filter(date == min(date)) %>%
+  group_by(date) %>%
+  summarise(n_custom = n())
+
+
+# Awkward data types ------------------------------------------------------
+library(lubridate)
+
+now()
+
+now() %>% class()
+today()
+
+ymd("2021-03-01")
+ymd("2021-Mar-01")
+
+my_dates <- c("23 Apr 2017", "31 Dec 2018", "11 Oct 2015")
+
+dmy(my_dates)
+
+my_times <- c("14:22:00", "13:04:01", "09:00:00")
+
+hms(my_times)
+
+ymd_hms("2021-04-01 13:00:00")
+
+seq(ymd("2021-04-07"), ymd("2022-03-22"), by = "week")
+
+seq(ymd("2021-04-07"), ymd("2022-03-22"), by = "3 week")
+seq(ymd("2021-04-07"), ymd("2022-03-22"), by = "month")
+seq(ymd("2021-04-07"), ymd("2022-03-22"), by = "6 month")
+seq(ymd("2021-04-07"), ymd("2022-03-22"), by = "year")
+
+
+nye <- ymd_hms("2020-12-31 23:59:59")
+nye
+
+nye + seconds(2)
+nye + days(2)
+nye + weeks(2)
+nye + months(2)
+
+months(2)
+
+month(nye)
+day(nye)
+
+quarters(dmy(my_dates))
+
+
+dmy(my_dates) %>%
+  ceiling_date(unit = "month")
+
+dmy(my_dates) %>%
+  floor_date(unit = "month")
+
+
+dmy(my_dates) %>%
+  rollforward()
+
+
+today() - dmy(my_dates)
+
+a <- dmy("1/1/1900")
+b <- dmy("1/1/2000")
+
+interval <- a %--% b
+
+interval
+
+period <- as.period(interval)
+duration <- as.duration(interval)
+
+time_length(period, unit = "year")
+time_length(duration, unit = "year")
 
 
