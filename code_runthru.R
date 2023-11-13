@@ -503,3 +503,40 @@ str_subset(colours(), "orange")
 
 str_subset(words, "^[^aeiou]*?a[^aeiou]*?e[^aeiou]*?i[^aeiou]*?o[^aeiou]*?u[^aeiou]*$")
 str_subset(words, "^[^aeiou]*?u[^aeiou]*?o[^aeiou]*?i[^aeiou]*?e[^aeiou]*?a[^aeiou]*$")
+
+# https://www.google.co.uk/books/edition/Mastering_Regular_Expressions/P5UXAwAAQBAJ?hl=en&gbpv=1&printsec=frontcover
+
+# Visualisation ggplot2 ---------------------------------------------------
+
+library(tidyverse)
+
+p <- ggplot(data = mpg, # DATA
+            mapping = aes(x = displ, y = cty) # MAPPING
+            ) +
+     geom_point() # GEOMETRY
+
+print(p)
+
+# A schematic for a ggplot
+# p <- ggplot(data = DATA
+#             mapping = MAPPING
+# ) +
+#     geom_GEOMETRY
+# 
+# print(p)
+
+p <- ggplot(data = mpg, # DATA
+            mapping = aes(x = displ, y = cty) # MAPPING
+            ) +
+     geom_line() # GEOMETRY
+
+print(p)
+
+ggplot(data = mpg, # DATA
+       mapping = aes(x = displ, y = cty) # MAPPING
+            ) +
+     geom_smooth() +
+     geom_point() 
+
+stringi::stri_subset(objects(package:ggplot2), regex = "geom_")
+
