@@ -500,7 +500,7 @@ str_c(str_to_title(firsts), str_to_title(lasts), sep = " ", collapse = ", ")
 
 
 str_subset(colours(), "orange")
-
+words <- readLines("https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt")
 str_subset(words, "^[^aeiou]*?a[^aeiou]*?e[^aeiou]*?i[^aeiou]*?o[^aeiou]*?u[^aeiou]*$")
 str_subset(words, "^[^aeiou]*?u[^aeiou]*?o[^aeiou]*?i[^aeiou]*?e[^aeiou]*?a[^aeiou]*$")
 
@@ -539,4 +539,270 @@ ggplot(data = mpg, # DATA
      geom_point() 
 
 stringi::stri_subset(objects(package:ggplot2), regex = "geom_")
+
+# ex pg.86 ----------------------------------------------------------------
+
+p <- ggplot(data = mpg,                          # DATA
+            mapping = aes(x = cyl, y = cty)) + # MAPPING 
+  geom_point()                                   # GEOMTRY
+
+print(p)
+
+p <- ggplot(data = mpg,                          # DATA
+            mapping = aes(x = factor(cyl), y = cty)) + # MAPPING 
+  geom_point()                                   # GEOMTRY
+
+print(p)
+
+p <- ggplot(data = mpg,                          # DATA
+            mapping = aes(x = factor(cyl), y = cty)) + # MAPPING 
+  geom_boxplot()                                   # GEOMTRY
+
+print(p)
+
+p <- ggplot(data = mpg,                          # DATA
+            mapping = aes(x = factor(cyl), y = cty)) + # MAPPING 
+  geom_boxplot()                                   # GEOMTRY
+
+print(p)
+
+p <- ggplot(data = mpg,                          # DATA
+            mapping = aes(x = factor(cyl), y = cty)) + # MAPPING 
+  geom_boxplot() +
+  geom_count() # GEOMTRY
+
+print(p)
+
+# Titles, axis labels, and axis limits ------------------------------------
+
+p <- ggplot(data = mpg,                          # DATA
+            mapping = aes(x = displ, y = cty)) + # MAPPING 
+  geom_point() +                                   # GEOMTRY
+  labs(title = "Car mileage vs engine displacement",
+       subtitle = "Data from the 'mpg' data",
+       x = "Engine displacement, litres",
+       y = "City miles per gallon")
+print(p)
+p <- ggplot(data = mpg,                          # DATA
+            mapping = aes(x = displ, y = cty)) + # MAPPING 
+  geom_point() +                                   # GEOMTRY
+  labs(title = "Car mileage vs engine displacement",
+       subtitle = "Data from the 'mpg' data",
+       x = "Engine displacement, litres",
+       y = "City miles per gallon")
+print(p)
+
+
+
+
+p <- ggplot(data = mpg,                          # DATA
+            mapping = aes(x = displ, y = cty)) + # MAPPING 
+  geom_point() +                                 # GEOMTRY
+  labs(title = "Car mileage vs engine displacement",
+       subtitle = "Data from the 'mpg' data",
+       x = "Engine displacement, litres",
+       y = "City miles per gallon") +
+  coord_cartesian(xlim = c(0, NA),
+                  ylim = c(0, NA))
+print(p)
+
+
+# ex pg. 89 ---------------------------------------------------------------
+
+ggplot(data = airquality, 
+       mapping = aes(x = Wind, y = Ozone)) +
+  geom_point() +
+  labs(title = "Is Ozone related to windspeed?",
+       subtitle = "Data from 'airquality'",
+       y = "Ozone, ppb",
+       x = "Windspeed, mph") +
+  coord_cartesian(xlim = c(0, NA))
+
+ggplot(data = mpg, aes(x = cty)) +
+  geom_histogram(bins = 15)
+
+# A (quick) guide to human perception -------------------------------------
+
+# Mapping more aesthetics -------------------------------------------------
+p <- ggplot(data = mpg, aes(x = displ,
+                            y = cty,
+                            colour = drv)) +
+  geom_point() +
+  labs(title = 'City mileage Vs engine displacement\nfrom the \"mpg\" Data',
+       x = 'Engine displacement, litres',
+       y = 'City miles per gallon')
+
+print(p)
+
+p <- ggplot(data = mpg, aes(x = displ,
+                            y = cty,
+                            colour = drv,
+                            size = cyl)) +
+  geom_point() +
+  labs(title = 'City mileage Vs engine displacement\nfrom the \"mpg\" Data',
+       x = 'Engine displacement, litres',
+       y = 'City miles per gallon')
+
+print(p)
+
+
+stringi::stri_subset(objects(package:ggplot2), regex = "scale_")
+
+p <- ggplot(data = mpg, aes(x = displ,
+                            y = cty,
+                            colour = drv,
+                            size = cyl)) +
+  geom_point() +
+  scale_size_continuous(name = "Number of cylinders",
+                        range = c(3, 6),
+                        breaks = c(4, 6, 8)) +
+  labs(title = 'City mileage Vs engine displacement\nfrom the \"mpg\" Data',
+       x = 'Engine displacement, litres',
+       y = 'City miles per gallon')
+
+print(p)
+
+p <- ggplot(data = mpg, aes(x = displ,
+                            y = cty,
+                            colour = drv,
+                            size = cyl)) +
+  geom_point() +
+  scale_size_continuous(name = "Number of cylinders",
+                        range = c(3, 6),
+                        breaks = c(4, 6, 8)) +
+  scale_x_log10() +
+  scale_y_log10() +
+  annotation_logticks() +
+  labs(title = 'City mileage Vs engine displacement\nfrom the \"mpg\" Data',
+       x = 'Engine displacement, litres',
+       y = 'City miles per gallon')
+
+print(p)
+
+diamonds
+
+# ex pg. 116 --------------------------------------------------------------
+
+ggplot(data = diamonds,
+       mapping = aes(x = carat,
+                     y = price,
+                     colour = clarity)) +
+  geom_point() +
+  scale_colour_viridis_d("Clarity", begin = 0.2, end = 0.8, direction = 1)
+
+
+# Facets ------------------------------------------------------------------
+
+ggplot(data = diamonds,
+       mapping = aes(x = carat,
+                     y = price,
+                     colour = clarity)) +
+  geom_point() +
+  scale_colour_viridis_d("Clarity", begin = 0.2, end = 0.8, direction = 1) +
+  facet_wrap(vars(cut))
+ggplot(data = diamonds,
+       mapping = aes(x = carat,
+                     y = price,
+                     colour = clarity)) +
+  geom_point() +
+  scale_colour_viridis_d("Clarity", begin = 0.2, end = 0.8, direction = 1) +
+  facet_wrap(vars(cut))
+
+
+p <- ggplot(data = mpg, aes(x = displ, y = cty, col = drv)) +
+  geom_point() +
+  scale_size_continuous(name = "Number of cylinders",
+                        range = c(2, 6),
+                        breaks = c(4, 6, 8)) +
+  labs(title = 'City mileage Vs engine displacement\nfrom the \"mpg\" Data',
+       x = 'Engine displacement, litres',
+       y = 'City miles per gallon',
+       col = "Drive train") +
+  facet_wrap(vars(cyl),
+             labeller = "label_both",
+             scales = "free")
+
+print(p)
+
+
+ggplot(data = diamonds,
+       mapping = aes(x = carat,
+                     y = price)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10() +
+  facet_grid(cut ~ clarity)
+
+library(patchwork)
+
+p1 <- ggplot(data = mpg, aes(x = displ, y = cty)) +
+  geom_point() +
+  labs(x = 'Engine displacement, litres',
+       y = 'City miles per gallon')
+
+p1
+
+p2 <- mpg %>%
+  ggplot(aes(x = fct_reorder(factor(cyl), cty, .desc = TRUE), y = cty)) +
+  geom_boxplot() +
+  labs(x = 'Engine Cylinders',
+       y = 'City miles per gallon')
+
+p2
+
+p3 <- mpg %>%
+  ggplot(aes(x = fct_reorder(factor(drv, labels = c("4-wheel drive",
+                                                    "Front-wheel drive",
+                                                    "Rear-wheel drive")),
+                             cty, .desc = TRUE), y = cty)) +
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+  labs(x = 'Vehicle drive train',
+       y = 'City miles per gallon')
+
+p3
+
+wrap_plots(p1, p2, p3, nrow = 1)
+
+patch <- wrap_plots(p1, p2, p3, nrow = 1)
+patch
+
+# Remove y-axis from p2
+patch[[2]] = patch[[2]] + theme(axis.text.y = element_blank(),
+                                axis.ticks.y = element_blank(),
+                                axis.title.y = element_blank())
+
+# Remove y-axis from p3
+patch[[3]] = patch[[3]] + theme(axis.text.y = element_blank(),
+                                axis.ticks.y = element_blank(),
+                                axis.title.y = element_blank())
+
+# add some plot annotation
+patch <- patch + plot_annotation(title = "Fuel economy versus vehicle type",
+                                 subtitle = "Data from ggplot2::mpg")
+
+patch
+
+
+# ex pg.127 ---------------------------------------------------------------
+
+measles <- read_csv("data/measles.csv")
+library(lubridate)
+
+measles %>%
+  mutate(date = dmy(date)) %>%
+  group_by(decade = floor_date(date, unit = "10 years")) %>%
+  filter(state == "California") %>%
+  summarise(count = mean(count, na.rm = TRUE)) %>%
+  ggplot(aes(x = decade, y = count)) +
+  geom_step()
+
+measles %>%
+  mutate(date = dmy(date)) %>%
+  group_by(state, decade = floor_date(date, unit = "10 years")) %>%
+  summarise(count = mean(count, na.rm = TRUE)) %>%
+  ggplot(aes(x = decade, y = count)) +
+  geom_step() +
+  facet_wrap(vars(state))
+
 
