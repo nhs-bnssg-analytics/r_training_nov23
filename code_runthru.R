@@ -805,4 +805,263 @@ measles %>%
   geom_step() +
   facet_wrap(vars(state))
 
+# statistics and modelling ------------------------------------------------
+
+library(tidyverse)
+
+pull(iris, Sepal.Length)
+     
+iris$Sepal.Length %>% summary()
+iris$Species %>% summary()
+skimr::skim(iris)
+
+# statistical tests -------------------------------------------------------
+
+sleep
+ggplot(sleep, aes(x = group, y = extra)) + geom_boxplot()
+
+t.test(extra ~ group, data = sleep)
+
+
+sleep
+
+t.test(extra ~ group, data = sleep, paired = TRUE)
+t.test(extra ~ group, data = sleep, paired = TRUE)
+
+# in this case the data are randomly shuffled
+t.test(extra ~ group,
+       data = sleep[sample(nrow(sleep),
+                           nrow(sleep), replace = FALSE), ],
+       paired = TRUE)
+
+t.test(x = sleep$extra[sleep$group == 1],
+       y = sleep$extra[sleep$group == 2],
+       paired = TRUE)
+
+library(modeldata)
+
+pairs(Sacramento)
+
+my_lm <- lm(price ~ sqft, data = Sacramento)
+
+summary(my_lm)
+
+resid(my_lm)
+
+# ex pg. 147 --------------------------------------------------------------
+
+ggplot(mpg, aes(x = displ, y = cty)) + geom_point()
+
+ex_lm <- lm(cty ~ displ, data = mpg)
+ex_lm
+coef(ex_lm)
+
+ggplot(mpg, aes(x = displ, y = cty)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+
+resid(ex_lm)
+
+ggplot(mpg, aes(x = displ, y = resid(ex_lm))) +
+  geom_point() 
+
+
+plot(my_lm)
+
+library(performance)
+library(see)
+check_model(my_lm)
+
+
+# ex pg.149 ---------------------------------------------------------------
+
+summary(ex_lm)
+
+plot(ex_lm)
+
+par(mfrow=c(2, 2)) # set up the graphics device
+plot(ex_lm)
+dev.off()
+
+# stats book
+# https://www.statlearning.com/
+
+
+my_lm2 <- update(my_lm, price ~ sqft + type)
+summary(my_lm2)
+
+my_lm2 <- lm(price ~ sqft + type, data= Sacramento)
+summary(my_lm2)
+
+my_lm3 <- lm(price ~ ., data = Sacramento)
+
+my_lm3 <- update(my_lm2, . ~ . + beds)
+summary(my_lm3)
+
+anova(my_lm3)
+
+anova(my_lm, my_lm3)
+
+# ex pg.153 ---------------------------------------------------------------
+
+ex_lm2 <- lm(cty ~ displ + drv, data = mpg)
+
+anova(ex_lm, ex_lm2)
+ex_lm3 <- lm(cty ~ log10(displ), data = mpg)
+
+
+anova(ex_lm, ex_lm3)
+
+ex_lm3 <- lm(log10(cty) ~ log10(displ), data = mpg)
+
+anova(ex_lm, ex_lm3)
+
+summary(ex_lm)
+summary(ex_lm3)
+
+
+# 
+# 
+# 
+library(tidymodels)
+
+iris_split <- initial_split(iris, strata = Species)
+iris_train <- training(iris_split)
+iris_test <- testing(iris_split)
+
+iris_rf <- randomForest::randomForest(Species ~ ., iris_train)
+species_pred <- predict(iris_rf, newdata = iris_test)
+
+iris_test_pred <- iris_test %>%
+  mutate(pred = species_pred)
+
+
+# tidy data ---------------------------------------------------------------
+# cleaning variable names -------------------------------------------------
+
+state.x77
+library(tidyr)
+library(tibble)
+install.packages("janitor")
+library(janitor)
+
+state_df <- state.x77 %>%
+  as.data.frame() %>%
+  rownames_to_column(var = "state") %>%
+  clean_names()
+
+# pivoting data ----------------------------------------------------------
+
+iris
+
+tidy_iris <- iris %>%
+  clean_names()
+
+
+tidy_iris %>%
+  pivot_longer(cols = -species,
+               names_to = "feature",
+               values_to = "observation")
+
+tidy_iris %>%
+  mutate(id = 1:n()) %>%
+  pivot_longer(cols = -c(id, species),
+               names_to = c("feature", "metric"),
+               names_sep = "_",
+               values_to = "observation")
+tidy_iris %>%
+  mutate(id = 1:n()) %>%
+  pivot_longer(cols = -c(id, species),
+               names_to = c("feature", "metric"),
+               names_sep = "_",
+               values_to = "observation") %>%
+  pivot_wider(names_from = "metric",
+              values_from = "observation")
+
+
+# ex pg.164 ---------------------------------------------------------------
+
+table4a
+
+table4a %>%
+  pivot_longer(cols = -country, 
+               names_to = "year",
+               values_to = "count")
+
+
+
+table3 %>%
+  separate(col = "rate",
+           into = c("count", "population"),
+           sep = "/")
+
+table2 %>%
+  pivot_wider(names_from = "type",
+              values_from = "count")
+
+# Performing joins in R ---------------------------------------------------
+
+band_members
+band_instruments
+
+
+left_join(band_members,
+          band_instruments,
+          by = join_by(name == name))
+
+left_join(band_members,
+          band_instruments,
+          by = join_by(name == name))
+           
+right_join(band_members,
+          band_instruments,
+          by = join_by(name == name))
+
+inner_join(band_members,
+          band_instruments,
+          by = join_by(name == name))
+
+full_join(band_members,
+          band_instruments,
+          by = join_by(name == name))
+
+
+
+# ex pg.167 ---------------------------------------------------------------
+
+library(nycflights13)
+
+flights
+airlines
+
+left_join(flights, airlines, join_by(carrier == carrier)) %>%
+  rename(carrier_name = name)
+
+measles <- readr::read_csv("data/measles.csv")
+
+
+measles %>%
+  left_join(select(state_df, state, area), by = join_by(state == state)) %>%
+  mutate(count_per_area = count/area) %>%
+  arrange(desc(count_per_area))
+
+
+# quick outro on databases ------------------------------------------------
+# https://solutions.posit.co/connections/db/
+
+library(RODBC)
+
+con <- RODBC::odbcDriverConnect(
+  "driver={SQL Server};server=Xsw-000-sp09;
+  trusted_connection=true")
+
+qry <- "
+SELECT top 10 * FROM
+[Analyst_SQL_Area].[dbo].[vw_BNSSG_CCG DOACs]
+"
+
+df <- sqlQuery(con, qry)
+
+
 
